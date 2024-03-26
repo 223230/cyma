@@ -1,6 +1,6 @@
-use std::fmt::Formatter;
-
+use len_trait::len::{Empty, Len};
 use std::fmt::Debug;
+use std::fmt::Formatter;
 use std::ops::{Deref, DerefMut, Index, IndexMut};
 
 /// A buffer that stores elements of type `T` in a First-In-First-Out manner.
@@ -147,11 +147,6 @@ impl<T: Default + Copy + Debug> RingBuffer<T> {
         self.head = (self.head + 1) % self.size;
     }
 
-    /// Returns the length of the buffer.
-    pub fn len(self: &Self) -> usize {
-        self.size
-    }
-
     /// Clears the entire buffer, filling it with default values (usually 0)
     pub fn clear(self: &mut Self) {
         self.data.iter_mut().for_each(|x| *x = T::default());
@@ -175,6 +170,18 @@ impl<'a, T: Copy> IntoIterator for &'a RingBuffer<T> {
             index: 0,
             index_back: self.size,
         }
+    }
+}
+
+impl<T> Empty for RingBuffer<T> {
+    fn is_empty(self: &Self) -> bool {
+        self.size == 0
+    }
+}
+impl<T> Len for RingBuffer<T> {
+    /// Returns the length of the buffer.
+    fn len(self: &Self) -> usize {
+        self.size
     }
 }
 

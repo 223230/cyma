@@ -1,3 +1,4 @@
+use len_trait::len::{Empty, Len};
 use nih_plug::buffer::Buffer;
 use num_traits::real::Real;
 use std::{
@@ -114,6 +115,18 @@ impl<'a, T: Copy> IntoIterator for &'a PeakBuffer<T> {
 impl<T: Debug + Copy> Debug for PeakBuffer<T> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), std::fmt::Error> {
         self.buffer.fmt(f)
+    }
+}
+
+impl<T> Empty for PeakBuffer<T> {
+    fn is_empty(self: &Self) -> bool {
+        self.buffer.is_empty()
+    }
+}
+impl<T> Len for PeakBuffer<T> {
+    /// Returns the length of the buffer.
+    fn len(self: &Self) -> usize {
+        self.buffer.len()
     }
 }
 

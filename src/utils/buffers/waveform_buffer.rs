@@ -1,5 +1,6 @@
 use crate::utils::ring_buffer::{Iter, RingBuffer};
 
+use len_trait::len::{Empty, Len};
 use nih_plug::buffer::Buffer;
 use num_traits::real::Real;
 use std::{
@@ -172,6 +173,18 @@ impl<T> Index<usize> for WaveformBuffer<T> {
 impl<T> IndexMut<usize> for WaveformBuffer<T> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         self.buffer.index_mut(index)
+    }
+}
+
+impl<T> Empty for WaveformBuffer<T> {
+    fn is_empty(self: &Self) -> bool {
+        self.buffer.is_empty()
+    }
+}
+impl<T> Len for WaveformBuffer<T> {
+    /// Returns the length of the buffer.
+    fn len(self: &Self) -> usize {
+        self.buffer.len()
     }
 }
 
